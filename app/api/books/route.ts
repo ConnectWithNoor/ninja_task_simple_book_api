@@ -15,20 +15,18 @@ export async function GET(request: NextRequest) {
       query += ` LIMIT ${queryParams.limit}`;
     }
 
-    console.log(query);
-
     const data = await pgInstance.unsafe(query);
 
     return NextResponse.json(data, {
       status: 200,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.log(error);
 
     return NextResponse.json(
-      { error: error || "Somethineg went wrong" },
+      { error: error.message || "Somethineg went wrong" },
       {
-        status: 401,
+        status: 500,
       }
     );
   }

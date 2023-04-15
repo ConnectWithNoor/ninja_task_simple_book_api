@@ -1,0 +1,19 @@
+POST /orders
+
+-   adding createdBy(user_id) in temporarily until I implement Authentication. (remove it)
+    encrypt access_token by user_id so we can use it as createdBy field.
+
+GET /orders
+DELETE /orders
+-  api to be implement after Authentication
+
+GET /orders/:orderId
+ 
+-  api to be implement after Authentication
+
+PATCH /orders/:orderId
+
+-   adding createdBy(user_id) in temporarily until I implement Authentication. (remove it)
+    encrypt access_token by user_id so we can use it as createdBy field.
+
+-   add checks to see if order_id is valid and custmer name is also valid
