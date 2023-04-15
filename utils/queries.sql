@@ -9,7 +9,8 @@ CREATE TABLE books (
 CREATE TABLE users (
     id SERIAL NOT NULL PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
-    email VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    is_token_issued BOOLEAN NOT NULL DEFAULT false
 );
 
 
