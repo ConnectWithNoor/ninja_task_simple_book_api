@@ -4,6 +4,7 @@ import { verifyAuth } from "./lib/auth";
 export async function middleware(request: NextRequest) {
   try {
     const authToken = request.headers.get("authorization")?.split(" ")[1];
+    const host = request.headers.get("host")!;
 
     if (!authToken) {
       return NextResponse.json(
@@ -15,7 +16,7 @@ export async function middleware(request: NextRequest) {
     }
 
     // api call to fetch user data from database
-    const decodedUser = await verifyAuth(authToken);
+    const decodedUser = await verifyAuth(authToken, host);
 
     // passing the data by headers
     const headers = new Headers(request.headers);
