@@ -42,9 +42,9 @@ export async function POST(request: NextRequest) {
     console.log(error);
 
     return NextResponse.json(
-      { error: error.message || "Somethineg went wrong" },
+      { error: "API client already registered." },
       {
-        status: 500,
+        status: 409,
       }
     );
   }
