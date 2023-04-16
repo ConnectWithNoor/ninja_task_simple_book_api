@@ -1,13 +1,15 @@
 import pgInstance from "@/src/lib/pgInstance";
+import { verify } from "jsonwebtoken";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const { decodedToken } = await req.json();
+    const { token } = await req.json();
 
-    if (!decodedToken) {
-      throw new Error("You are not permitted");
-    }
+    const decodedToken = verify(
+      token,
+      process.env.ACCESS_TOKEN_SECRET!
+    ) as Record<string, string>;
 
     const query = `SELECT * from users WHERE email = '${decodedToken.email}'`;
 
