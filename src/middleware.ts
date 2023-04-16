@@ -19,7 +19,7 @@ export async function middleware(request: NextRequest) {
 
     // passing the data by headers
     const headers = new Headers(request.headers);
-    headers.set("user", JSON.stringify(decodedUser));
+    headers.set("userId", JSON.stringify(decodedUser.id));
 
     return NextResponse.next({ headers });
   } catch (error: any) {

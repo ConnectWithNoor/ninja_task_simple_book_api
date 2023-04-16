@@ -10,7 +10,7 @@ type Body = {
 export async function POST(request: NextRequest) {
   try {
     const { bookId, customerName } = (await request.json()) as Body;
-    const userData = JSON.parse(request.headers.get("user")!);
+    const userId = JSON.parse(request.headers.get("userId")!);
 
     if (!bookId || !customerName) {
       return NextResponse.json(
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     }
 
     const query = `INSERT INTO "orders" (createdBy, bookId, customer_name, quantity)
-VALUES (${userData.id}, ${bookId}, '${customerName}', 1) returning *`;
+VALUES (${userId}, ${bookId}, '${customerName}', 1) returning *`;
 
     const response = await pgInstance.unsafe(query);
 
@@ -44,9 +44,12 @@ VALUES (${userData.id}, ${bookId}, '${customerName}', 1) returning *`;
 // get all orders
 export async function GET(request: NextRequest) {
   try {
-    // to be implemented after authentication
+    const userId = JSON.parse(request.headers.get("userId")!);
+    const query = `SELECT * FROM orders WHERE createdBy = ${userId}`;
 
-    return NextResponse.json("Hello", {
+    const response = await pgInstance.unsafe(query);
+
+    return NextResponse.json(response, {
       status: 200,
     });
   } catch (error: any) {

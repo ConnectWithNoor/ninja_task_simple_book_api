@@ -11,10 +11,12 @@ export async function GET(
 ) {
   try {
     const { orderId } = params;
+    const userId = JSON.parse(request.headers.get("userId")!);
 
-    // to be implemented after authentication
+    const query = `SELECT * from orders WHERE id = ${orderId} AND createdBy = ${userId}`;
+    const response = await pgInstance.unsafe(query);
 
-    return NextResponse.json(orderId, {
+    return NextResponse.json(response, {
       status: 200,
     });
   } catch (error: any) {
@@ -35,13 +37,23 @@ export async function PATCH(
 ) {
   try {
     const { orderId } = params;
-    const { createdBy, customerName } = await request.json();
+    const { customerName } = await request.json();
+    const userId = JSON.parse(request.headers.get("userId")!);
+
+    if (!customerName) {
+      return NextResponse.json(
+        { error: "required fields missing." },
+        {
+          status: 401,
+        }
+      );
+    }
 
     const query = `
     UPDATE orders
     SET customer_name = '${customerName}'
     WHERE id = ${orderId}
-    AND createdBy = ${createdBy}
+    AND createdBy = ${userId}
     returning *
     ;
     `;
@@ -69,12 +81,18 @@ export async function DELETE(
 ) {
   try {
     const { orderId } = params;
-    const userInfo = JSON.parse(request.headers.get("user")!);
-    // to be implemented after authentication
+    const userId = JSON.parse(request.headers.get("userId")!);
 
-    return NextResponse.json(orderId, {
-      status: 200,
-    });
+    const query = `DELETE from orders WHERE id = ${orderId} AND createdBy = ${userId}`;
+
+    await pgInstance.unsafe(query);
+
+    return NextResponse.json(
+      { message: "deleted successfully" },
+      {
+        status: 200,
+      }
+    );
   } catch (error: any) {
     console.log(error);
 
