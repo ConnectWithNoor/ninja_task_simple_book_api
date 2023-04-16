@@ -1,4 +1,4 @@
-import pgInstance from "@/lib/pgInstance";
+import pgInstance from "@/src/lib/pgInstance";
 import { NextRequest, NextResponse } from "next/server";
 
 type Params = {

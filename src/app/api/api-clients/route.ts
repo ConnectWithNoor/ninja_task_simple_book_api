@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
-import pgInstance from "@/lib/pgInstance";
+import pgInstance from "@/src/lib/pgInstance";
 
 type Body = {
   clientName?: string;

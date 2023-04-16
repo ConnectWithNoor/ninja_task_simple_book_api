@@ -1,4 +1,4 @@
-import pgInstance from "@/lib/pgInstance";
+import pgInstance from "@/src/lib/pgInstance";
 import { NextRequest, NextResponse } from "next/server";
 
 type Body = {
@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: "required fields missing." },
         {
-          status: 401,
+          status: 403,
         }
       );
     }
