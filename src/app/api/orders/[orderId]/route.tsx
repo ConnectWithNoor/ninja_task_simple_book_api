@@ -69,7 +69,7 @@ export async function DELETE(
 ) {
   try {
     const { orderId } = params;
-
+    const userInfo = JSON.parse(request.headers.get("user")!);
     // to be implemented after authentication
 
     return NextResponse.json(orderId, {

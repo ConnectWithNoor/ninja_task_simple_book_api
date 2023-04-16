@@ -5,9 +5,7 @@ export async function middleware(request: NextRequest) {
   try {
     const authToken = request.headers.get("authorization")?.split(" ")[1];
 
-    const decodedUser = authToken && (await verifyAuth(authToken));
-
-    if (!decodedUser) {
+    if (!authToken) {
       return NextResponse.json(
         { error: "not permitted" },
         {
@@ -16,9 +14,14 @@ export async function middleware(request: NextRequest) {
       );
     }
 
-    console.log(decodedUser);
+    // api call to fetch user data from database
+    const decodedUser = await verifyAuth(authToken);
 
-    return NextResponse.next();
+    // passing the data by headers
+    const headers = new Headers(request.headers);
+    headers.set("user", JSON.stringify(decodedUser));
+
+    return NextResponse.next({ headers });
   } catch (error: any) {
     return NextResponse.json(
       { error: error.message },

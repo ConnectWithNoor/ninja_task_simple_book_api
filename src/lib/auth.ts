@@ -1,15 +1,18 @@
 import { jwtVerify } from "jose";
-import pgInstance from "./pgInstance";
 
 export async function verifyAuth(token: string) {
   try {
-    const verified = await jwtVerify(
+    const decodedToken = await jwtVerify(
       token,
       new TextEncoder().encode(process.env.ACCESS_TOKEN_SECRET!)
     );
 
-    const query = `SELECT * FROM users WHERE email = '${verified.payload.email}'`;
-    const decodedUser = await pgInstance.unsafe(query);
+    const response = await fetch("http://localhost:3000/api/users", {
+      method: "POST",
+      body: JSON.stringify({ decodedToken: decodedToken.payload }),
+    });
+
+    const decodedUser = await response.json();
 
     return decodedUser;
   } catch (error) {
